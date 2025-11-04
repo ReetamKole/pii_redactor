@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Complete</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+      .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem; max-width: 720px; }
+      code { background: #f6f6f6; padding: 0.15rem 0.3rem; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Upload Complete</h1>
+    <div class="card">
+      <p>Raw file stored at key: <code>{{ raw_key }}</code> in bucket <code>{{ raw_bucket }}</code></p>
+      <p>Metadata stored at key: <code>{{ meta_key }}</code> in bucket <code>{{ raw_bucket }}</code></p>
+      <p>Processed/redacted file stored at key: <code>{{ processed_key }}</code> in bucket <code>{{ processed_bucket }}</code></p>
+      <p>(Expose signed URLs or a listing endpoint later for direct downloads.)</p>
+      <a href="/">Upload another</a>
+    </div>
+  </body>
+</html>

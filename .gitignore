@@ -1,0 +1,14 @@
+__pycache__/
+.pytest_cache/
+.env
+.env.*
+*.pyc
+.DS_Store
+.venv/
+.venv311/
+venv/
+.idea/
+.vscode/
+service-account.json
+local_uploads/
+Thumbs.db
