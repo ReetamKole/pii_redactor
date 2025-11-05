@@ -6,7 +6,7 @@ import pandas as pd
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
+from fastapi import HTTPException
 from .storage import upload_bytes
 from .utils import redact_text, is_valid_phone
 from dotenv import load_dotenv
@@ -59,7 +59,7 @@ async def upload(
             redacted = redact_text(content.decode("utf-8", errors="ignore"))
             upload_bytes(bucket=PROCESSED_BUCKET, blob_name=processed_key, data=redacted.encode("utf-8"), content_type="text/plain")
     except Exception as e:
-        print("Processing error:", e)
+        raise HTTPException(status_code=500, detail=f"Processing failed: {e}")
 
     return templates.TemplateResponse("success.html", {
         "request": request,
