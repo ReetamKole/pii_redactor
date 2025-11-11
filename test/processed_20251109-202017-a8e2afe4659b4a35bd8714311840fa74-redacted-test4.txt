@@ -1,0 +1,17 @@
+Email:
+
+test@test 
+
+[REDACTED_EMAIL]
+
+Phone:
+
+id : [REDACTED_NUMBER] 
+
+Phone : [REDACTED_PHONE], [REDACTED_PHONE], [REDACTED_PHONE]
+
+credit:[REDACTED_NUMBER]
+ 
+ssn;[REDACTED_SSN]
+
+date: [REDACTED_DOB]
