@@ -15,12 +15,17 @@ logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 
-from .storage import upload_bytes
+from .storage import upload_bytes, init_database, save_metadata_to_db
 from .utils import redact_text, is_valid_phone
 
 logger = logging.getLogger("app")
 app = FastAPI()
 templates = Jinja2Templates(directory="app/templates")
+
+# Initialize database on startup
+@app.on_event("startup")
+async def startup_event():
+    init_database()
 
 RAW_BUCKET = os.getenv("GCS_RAW_BUCKET", "your-raw-data-bucket")
 PROCESSED_BUCKET = os.getenv("GCS_PROCESSED_BUCKET", "your-processed-data-bucket")
@@ -65,6 +70,10 @@ async def upload(
         "raw_key": raw_key,
         "processed_key": processed_key,
     }
+    
+    # Save metadata to database
+    save_metadata_to_db(metadata)
+    
     meta_key = f"raw/{upload_id}/{ts}-{Path(safe_name).stem}.json"
     upload_bytes(bucket=RAW_BUCKET, blob_name=meta_key, data=json.dumps(metadata).encode("utf-8"), content_type="application/json")
     try:
