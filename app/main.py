@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 
 from .storage import upload_bytes, init_database, save_metadata_to_db
-from .utils import redact_text, is_valid_phone
+from .utils import redact_text, is_valid_phone, is_valid_email, detect_anomalies
 
 logger = logging.getLogger("app")
 app = FastAPI()
@@ -57,6 +57,10 @@ async def upload(
     
     safe_name = Path(file.filename).name
     processed_key = f"processed/{ts}-{upload_id}-redacted-{safe_name}"
+    
+    # Detect anomalies in user input
+    anomaly_check = detect_anomalies(name, email, phone)
+    
     metadata = {
         "upload_id": upload_id,
         "name": name,
@@ -67,9 +71,16 @@ async def upload(
         "filetype": file.content_type or "application/octet-stream",
         "uploaded_utc": ts,
         "phone_valid": is_valid_phone(phone),
+        "email_valid": is_valid_email(email),
+        "anomaly": anomaly_check["has_anomaly"],
+        "anomaly_details": anomaly_check["anomaly_details"],
         "raw_key": raw_key,
         "processed_key": processed_key,
     }
+    
+    # Log anomalies if detected
+    if anomaly_check["has_anomaly"]:
+        logger.warning(f"Anomalies detected for upload {upload_id}: {anomaly_check['anomaly_details']}")
     
     # Save metadata to database
     save_metadata_to_db(metadata)

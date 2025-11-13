@@ -1,4 +1,3 @@
-
 import os
 from typing import Dict, Any
 from datetime import datetime
@@ -40,7 +39,7 @@ def upload_bytes(bucket: str, blob_name: str, data: bytes, content_type: str = "
                 "GCP_PROJECT_ID, GCS_RAW_BUCKET, GCS_PROCESSED_BUCKET or set USE_LOCAL_STORAGE=true."
             ) from e
 
-# Database setup
+
 Base = declarative_base()
 
 class MetadataRecord(Base):
@@ -56,6 +55,9 @@ class MetadataRecord(Base):
     filetype = Column(String(100))
     uploaded_utc = Column(String(20))
     phone_valid = Column(String(10))
+    email_valid = Column(String(10))  # New field
+    anomaly = Column(String(10))      # New field
+    anomaly_details = Column(JSON)    # New field
     raw_key = Column(Text)
     processed_key = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -67,7 +69,6 @@ SessionLocal = None
 def init_database():
     global engine, SessionLocal
     
-    # Get database URL from environment
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
         logger.warning("DATABASE_URL not set, skipping database initialization")
@@ -101,6 +102,9 @@ def save_metadata_to_db(metadata: Dict[str, Any]) -> bool:
             filetype=metadata.get("filetype"),
             uploaded_utc=metadata.get("uploaded_utc"),
             phone_valid=str(metadata.get("phone_valid")),
+            email_valid=str(metadata.get("email_valid")),  # New field
+            anomaly=str(metadata.get("anomaly")),           # New field
+            anomaly_details=metadata.get("anomaly_details"), # New field
             raw_key=metadata.get("raw_key"),
             processed_key=metadata.get("processed_key")
         )
