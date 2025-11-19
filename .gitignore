@@ -1,63 +1,51 @@
-# Sensitive deployment scripts
+
 scripts/
 
-# Environment files with secrets
 .env
 .env.local
 .env.production
 
-# Google Cloud credentials
 *.json
 pii-redactor-*.json
 
-# Virtual environment
 .venv/
 .venv311/
 venv/
 env/
 
-# Python cache
+
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
 
-# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS files
 .DS_Store
 Thumbs.db
 
-# Logs
 *.log
 logs/
 
-# Database
 *.db
 *.sqlite3
 
-# Kubernetes secrets (if any)
 k8s/*secret*.yaml
 
-# Temporary files
 *.tmp
 *.temp
 temp/
 
-# Build artifacts
 dist/
 build/
 *.egg-info/
 
-# Coverage reports
 htmlcov/
 .coverage
 .pytest_cache/
 
-# Documentation builds
 docs/_build/
